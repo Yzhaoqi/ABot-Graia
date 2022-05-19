@@ -134,7 +134,7 @@ async def main(
         san = 2
     if tag1.matched or tag2.matched:
         tag = tag1.result.asDisplay() if tag1.matched else tag2.result.asDisplay()
-        async with httpx.AsyncClient(proxies=proxies) as client:
+        async with httpx.AsyncClient() as client:
             r = await client.get(
                 f"https://api.lolicon.app/setu/v2?r18={san}tag={tag}"
             )
@@ -146,7 +146,7 @@ async def main(
         else:
             await safeSendGroupMessage(group, MessageChain.create("慢一点慢一点，别冲辣！"))
     else:
-        async with httpx.AsyncClient(proxies=proxies) as client:
+        async with httpx.AsyncClient() as client:
             r = await client.get(f"https://api.lolicon.app/setu/v2?r18={san}")
             res = r.json()
         if res.get("error") == "":
