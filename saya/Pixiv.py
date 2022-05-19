@@ -4,6 +4,7 @@ import asyncio
 
 from datetime import datetime
 
+from loguru import logger
 from graia.saya import Channel
 from graia.ariadne.app import Ariadne
 from graia.ariadne.event.message import GroupMessage
@@ -31,6 +32,7 @@ proxies = {
 
 
 async def sendPixivMessage(data, app: Ariadne, group: Group, member: Member):
+    logger.info(f"pixiv data = {data}")
     if yaml_data["Saya"]["Pixiv"]["Forward"]:
         if member.permission == MemberPerm.Owner:
             name = "群主"
@@ -49,6 +51,7 @@ async def sendPixivMessage(data, app: Ariadne, group: Group, member: Member):
         ]
         group_members = await app.getMemberList(group)
         for pic in data:
+            logger.info(f"pixiv pic = {pic}")
             member = random.choice(group_members)
             forwardnode.append(
                 ForwardNode(
