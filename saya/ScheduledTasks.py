@@ -39,13 +39,13 @@ async def clean_group(app: Ariadne):
     i = 0
     for group in get_group_list:
         member_count = len(await app.getMemberList(group))
-        if member_count < 15:
+        if member_count < 1:
             if group.id not in group_list["white"]:
                 try:
                     await safeSendGroupMessage(
                         group,
                         MessageChain.create(
-                            f'{yaml_data["Basic"]["BotName"]} 当前暂不加入群人数低于 15 的群，正在退出'
+                            f'{yaml_data["Basic"]["BotName"]} 当前暂不加入群人数低于 1 的群，正在退出'
                         ),
                     )
                     await app.quitGroup(group)

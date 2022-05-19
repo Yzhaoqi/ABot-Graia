@@ -251,11 +251,11 @@ async def get_BotJoinGroup(app: Ariadne, joingroup: BotJoinGroupEvent):
         return await app.quitGroup(joingroup.group.id)
 
     member_count = len(await app.getMemberList(joingroup.group))
-    if member_count < 15:
+    if member_count < 1:
         if joingroup.group.id not in group_list["white"]:
             await safeSendGroupMessage(
                 joingroup.group.id,
-                MessageChain.create(f"当前群人数过少 ({member_count}/15)，暂不加入"),
+                MessageChain.create(f"当前群人数过少 ({member_count}/1)，暂不加入"),
             )
             await app.sendFriendMessage(
                 yaml_data["Basic"]["Permission"]["Master"],
