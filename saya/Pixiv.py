@@ -25,8 +25,8 @@ from util.control import Function, Interval, Permission, Rest
 channel = Channel.current()
 
 proxies = {
-    "http": "http://127.0.0.1:1080",
-    "https": "http://127.0.0.1:1080"
+    "http://": "http://127.0.0.1:1080",
+    "https://": "http://127.0.0.1:1080"
 }
 
 @channel.use(
