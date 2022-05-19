@@ -24,6 +24,10 @@ from util.control import Function, Interval, Permission, Rest
 
 channel = Channel.current()
 
+proxies = {
+    "http": "http://127.0.0.1:1080",
+    "https": "http://127.0.0.1:1080"
+}
 
 @channel.use(
     ListenerSchema(
@@ -57,7 +61,7 @@ async def main(
 
     if tag1.matched or tag2.matched:
         tag = tag1.result.asDisplay() if tag1.matched else tag2.result.asDisplay()
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(proxies=proxies) as client:
             r = await client.get(
                 f"https://api.a60.one:8443/get/tags/{tag}?num=10&san={san}"
             )
@@ -136,7 +140,7 @@ async def main(
         else:
             await safeSendGroupMessage(group, MessageChain.create("慢一点慢一点，别冲辣！"))
     else:
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(proxies=proxies) as client:
             r = await client.get(f"https://api.a60.one:8443/?num=10&san={san}")
             res = r.json()
         if res.get("code", False) == 200:
