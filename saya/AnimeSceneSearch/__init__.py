@@ -154,7 +154,7 @@ async def anime_search(
             async with httpx.AsyncClient(timeout=15) as client:
 
                 params = {
-                    "key": yaml_data["Saya"]["AnimeSceneSearch"]["tracemoe_key"],
+                    # "key": yaml_data["Saya"]["AnimeSceneSearch"]["tracemoe_key"],
                     "url": image_url,
                 }
                 error = None
