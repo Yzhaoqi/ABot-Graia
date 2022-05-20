@@ -1,3 +1,8 @@
+import base64
+import os
+import urllib
+from urllib.request import urlretrieve
+
 import httpx
 import random
 import asyncio
@@ -32,7 +37,6 @@ proxies = {
 
 
 async def sendPixivMessage(data, app: Ariadne, group: Group, member: Member):
-    logger.info(f"pixiv data = {data}")
     if yaml_data["Saya"]["Pixiv"]["Forward"]:
         if member.permission == MemberPerm.Owner:
             name = "群主"
@@ -51,7 +55,6 @@ async def sendPixivMessage(data, app: Ariadne, group: Group, member: Member):
         ]
         group_members = await app.getMemberList(group)
         for pic in data:
-            logger.info(f"pixiv pic = {pic}")
             member = random.choice(group_members)
             forwardnode.append(
                 ForwardNode(
@@ -68,6 +71,16 @@ async def sendPixivMessage(data, app: Ariadne, group: Group, member: Member):
                     ),
                 )
             )
+            image_url = pic["urls"]['original']
+            logger.info(f"pixiv pic = {image_url}")
+            image_tmp = f'./image/{os.path.basename(image_url)}'
+            httpproxy_handler = urllib.request.ProxyHandler(proxies)
+            opener = urllib.request.build_opener(httpproxy_handler)
+            urllib.request.install_opener(opener)
+            urllib.request.urlretrieve(image_url, image_tmp)
+            with open(image_tmp, "rb") as img_file:
+                img_base64 = base64.b64encode(img_file.read())
+                logger.info(f"img length={len(img_base64)}")
             forwardnode.append(
                 ForwardNode(
                     senderId=member.id,
@@ -75,7 +88,7 @@ async def sendPixivMessage(data, app: Ariadne, group: Group, member: Member):
                     senderName=member.name,
                     messageChain=MessageChain.create(
                         [
-                            Image(url=pic["urls"]['original']),
+                            Image(base64=img_base64),
                         ]
                     ),
                 )
